@@ -1,0 +1,15 @@
+Stage,Sub-Stage,Description,Method/Technique
+Model Design,Architecture Definition,Designing the Autoencoder with convolutional layers,Conv2D + MaxPooling2D + UpSampling2D
+Model Design,Input Shape,Setting input image shape to 256x256 grayscale,"(256, 256, 1)"
+Model Development,Model Compilation,Compiling the autoencoder with Adam optimizer and binary crossentropy,"autoencoder.compile(optimizer='adam', loss='binary_crossentropy')"
+Data Preparation,Load Medical Images,"Loading grayscale MRI, CT, and X-ray images and resizing to 256x256",cv2.imread + resize + normalization
+Model Training,Train Autoencoder,Training on each modality separately for 20 epochs with batch size 16,autoencoder.fit(...)
+Experimentation,JPEG Compression,Compressing each image using OpenCV JPEG encoder (quality=50%),cv2.imencode + cv2.imdecode
+Experimentation,Autoencoder Compression,Autoencoder predicts from original images,autoencoder.predict(imgs)
+Experimentation,Hybrid Compression,"First JPEG compress image, then feed into Autoencoder",compress_jpeg() -> autoencoder.predict()
+Evaluation,PSNR Metric,Peak Signal-to-Noise Ratio between original and reconstructed image,"psnr(original, reconstructed)"
+Evaluation,SSIM Metric,Structural Similarity Index between original and reconstructed image,tf.image.ssim(...)
+Evaluation,Pixel Accuracy,Binary pixel-level comparison between original and compressed image,np.mean((original > 0.5) == (compressed > 0.5))
+Results Logging,Average Metrics,"Averaging PSNR, SSIM, Pixel Accuracy for each modality & technique",np.mean([...])
+Results Logging,Save Results,Saving all results into CSV file,pd.DataFrame(...).to_csv(...)
+Visualization,Plotting Metrics,"Plot PSNR, SSIM, Pixel Accuracy comparisons per modality",matplotlib.pyplot
